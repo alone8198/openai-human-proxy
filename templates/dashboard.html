@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenAI Human Proxy — 管理后台</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 OpenAI Human Proxy</h1>
+            <p class="subtitle">人工回复管理后台 — 查看待处理的 API 请求，手动输入回复</p>
+        </header>
+
+        <main>
+            <section class="stats-bar">
+                <div class="stat">
+                    <span class="stat-number">{{ pending_requests|length }}</span>
+                    <span class="stat-label">待处理请求</span>
+                </div>
+            </section>
+
+            <section class="requests-list">
+                {% if pending_requests %}
+                    <div class="request-cards">
+                    {% for req in pending_requests %}
+                        <div class="card" onclick="location.href='/request/{{ req.id }}'">
+                            <div class="card-header">
+                                <span class="card-id">#{{ req.id[:12] }}</span>
+                                <span class="card-model">{{ req.model }}</span>
+                                <span class="card-badge {% if req.is_stream %}stream{% else %}normal{% endif %}">
+                                    {{ '流式' if req.is_stream else '普通' }}
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-meta">
+                                    <span>🕐 {{ req.created_at }}</span>
+                                    <span>💬 {{ req.messages_count }} 条消息</span>
+                                </div>
+                                <div class="card-preview">
+                                    {{ req.last_message_preview }}
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <span class="btn-link">查看详情 →</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">📭</div>
+                        <h2>没有待处理请求</h2>
+                        <p>目前没有等待人工回复的 API 请求。</p>
+                        <p class="hint">
+                            调用 <code>/v1/chat/completions</code> 的请求会自动出现在这里，
+                            你输入回复后客户端的 API 调用会立即收到响应。
+                        </p>
+                    </div>
+                {% endif %}
+            </section>
+        </main>
+
+        <footer>
+            <p>OpenAI Human Proxy v1.0 · 
+               <a href="https://github.com/alone8198/openai-human-proxy" target="_blank">GitHub</a></p>
+        </footer>
+    </div>
+</body>
+</html>

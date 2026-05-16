@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>请求详情 — OpenAI Human Proxy</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="detail-header">
+            <a href="/" class="back-link">← 返回列表</a>
+            <h1>请求详情</h1>
+            <span class="request-id">#{{ req.id[:12] }}</span>
+        </header>
+
+        <main>
+            <section class="request-info">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>模型</label>
+                        <span class="value">{{ req.model }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>类型</label>
+                        <span class="value">{{ '流式 (stream)' if req.is_stream else '普通 (non-stream)' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>创建时间</label>
+                        <span class="value">{{ req.created_at }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>状态</label>
+                        <span class="status-badge {% if req.is_done %}done{% else %}pending{% endif %}">
+                            {{ '已回复' if req.is_done else '等待回复' }}
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="messages-section">
+                <h2>对话消息</h2>
+                <div class="messages-list">
+                    {% for msg in req.messages %}
+                    <div class="message {{ msg.role }}">
+                        <div class="message-role">{{ '👤 用户' if msg.role == 'user' else '⚙️ 系统' if msg.role == 'system' else '🛠️ 助手' if msg.role == 'assistant' else msg.role }}</div>
+                        <div class="message-content">{{ msg.content }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            {% if req.is_done and req.reply %}
+            <section class="reply-section">
+                <h2>已发送的回复</h2>
+                <div class="reply-box">
+                    <div class="reply-content">{{ req.reply }}</div>
+                    <div class="reply-meta">已发送</div>
+                </div>
+            </section>
+            {% elif not req.is_done %}
+            <section class="reply-section">
+                <h2>输入回复</h2>
+                <form action="/request/{{ req.id }}/reply" method="post" class="reply-form">
+                    <textarea name="content" rows="8" placeholder="在此输入人工回复内容..." required></textarea>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">✉️ 发送回复</button>
+                        <button type="button" class="btn btn-danger"
+                                onclick="if(confirm('确定取消这个请求？')){document.getElementById('cancel-form').submit();}">
+                            🗑️ 取消请求
+                        </button>
+                    </div>
+                </form>
+                <form id="cancel-form" action="/request/{{ req.id }}/cancel" method="post" style="display:none;"></form>
+            </section>
+            {% endif %}
+        </main>
+    </div>
+</body>
+</html>

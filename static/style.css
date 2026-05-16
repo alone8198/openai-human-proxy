@@ -1,0 +1,471 @@
+/* ============================================================
+   OpenAI Human Proxy — 管理后台样式
+   ============================================================ */
+
+:root {
+  --bg: #0f1419;
+  --surface: #1a1f2e;
+  --surface-hover: #242b3d;
+  --border: #2d3548;
+  --text: #e1e8ed;
+  --text-secondary: #8899a6;
+  --accent: #10a37f;
+  --accent-hover: #0d8c6f;
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+  --user-msg: #1a2e3f;
+  --system-msg: #1f2937;
+  --assistant-msg: #0f2a1f;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* ===== Header ===== */
+
+header {
+  text-align: center;
+  padding: 40px 0 30px;
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 0;
+}
+
+.detail-header h1 {
+  font-size: 1.4rem;
+  flex: 1;
+}
+
+.back-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.request-id {
+  color: var(--text-secondary);
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 0.85rem;
+}
+
+/* ===== Stats ===== */
+
+.stats-bar {
+  margin-bottom: 24px;
+}
+
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.stat-label {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* ===== Request Cards ===== */
+
+.request-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.card-id {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.card-model {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.card-badge {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.card-badge.stream {
+  background: #1d4ed8;
+  color: white;
+}
+
+.card-badge.normal {
+  background: var(--accent);
+  color: white;
+}
+
+.card-body {
+  margin-bottom: 8px;
+}
+
+.card-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.card-preview {
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-footer {
+  text-align: right;
+}
+
+.btn-link {
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* ===== Empty State ===== */
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.empty-state h2 {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+}
+
+.empty-state p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+
+.empty-state code {
+  background: var(--surface-hover);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.hint {
+  margin-top: 16px !important;
+  font-size: 0.85rem !important;
+  color: var(--text-secondary) !important;
+}
+
+/* ===== Request Info ===== */
+
+.request-info {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.info-item label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.info-item .value {
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-badge.pending {
+  background: #92400e;
+  color: #fde68a;
+}
+
+.status-badge.done {
+  background: #065f46;
+  color: #a7f3d0;
+}
+
+/* ===== Messages ===== */
+
+.messages-section {
+  margin-bottom: 20px;
+}
+
+.messages-section h2 {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+
+.messages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message {
+  padding: 14px 16px;
+  border-radius: 10px;
+  border-left: 3px solid var(--border);
+}
+
+.message.user {
+  background: var(--user-msg);
+  border-left-color: #3b82f6;
+}
+
+.message.system {
+  background: var(--system-msg);
+  border-left-color: #8b5cf6;
+}
+
+.message.assistant {
+  background: var(--assistant-msg);
+  border-left-color: var(--accent);
+}
+
+.message-role {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text-secondary);
+}
+
+.message-content {
+  font-size: 0.95rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ===== Reply ===== */
+
+.reply-section {
+  margin-bottom: 20px;
+}
+
+.reply-section h2 {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+
+.reply-box {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.reply-content {
+  font-size: 0.95rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-bottom: 8px;
+}
+
+.reply-meta {
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+
+.reply-form textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+
+.reply-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-danger {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+
+.btn-danger:hover {
+  background: var(--danger);
+  color: white;
+}
+
+/* ===== Footer ===== */
+
+footer {
+  text-align: center;
+  padding: 30px 0;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* ===== Markdown code in messages ===== */
+
+.message-content code {
+  background: var(--surface-hover);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+/* ===== Responsive ===== */
+
+@media (max-width: 600px) {
+  .container {
+    padding: 12px;
+  }
+
+  header {
+    padding: 24px 0 16px;
+  }
+
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
