@@ -35,6 +35,22 @@
                             {{ '已回复' if req.is_done else '等待回复' }}
                         </span>
                     </div>
+                    <div class="info-item">
+                        <label>客户端</label>
+                        {% if req.client_connected %}
+                            <span class="value client-connected">🟢 在线</span>
+                        {% else %}
+                            <span class="value client-disconnected">
+                                {% if req.is_done %}❌ 已离线{% else %}❌ 客户端已断开，仍可回复{% endif %}
+                            </span>
+                        {% endif %}
+                    </div>
+                    {% if req.replied_at %}
+                    <div class="info-item">
+                        <label>回复时间</label>
+                        <span class="value">{{ req.replied_at }}</span>
+                    </div>
+                    {% endif %}
                 </div>
             </section>
 
@@ -51,16 +67,27 @@
             </section>
 
             {% if req.is_done and req.reply %}
+            <!-- 已回复 → 展示回复内容 -->
             <section class="reply-section">
-                <h2>已发送的回复</h2>
+                <h2>发出的回复</h2>
                 <div class="reply-box">
                     <div class="reply-content">{{ req.reply }}</div>
-                    <div class="reply-meta">已发送</div>
+                    {% if not req.client_connected and req.replied_at is defined %}
+                        <div class="reply-meta">⚠️ 客户端已离线，回复已存档</div>
+                    {% else %}
+                        <div class="reply-meta">✅ 已发送给客户端</div>
+                    {% endif %}
                 </div>
             </section>
             {% elif not req.is_done %}
+            <!-- 未回复 → 显示回复表单 -->
             <section class="reply-section">
                 <h2>输入回复</h2>
+                {% if not req.client_connected %}
+                <div class="warning-banner">
+                    ⚠️ 客户端连接已断开，仍可回复。回复将保存在历史记录中。
+                </div>
+                {% endif %}
                 <form action="/request/{{ req.id }}/reply" method="post" class="reply-form">
                     <textarea name="content" rows="8" placeholder="在此输入人工回复内容..." required></textarea>
                     <div class="form-actions">

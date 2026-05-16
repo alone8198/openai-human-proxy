@@ -19,9 +19,21 @@
                     <span class="stat-number">{{ pending_requests|length }}</span>
                     <span class="stat-label">待处理请求</span>
                 </div>
+                <div class="stat muted">
+                    <span class="stat-number">{{ completed_requests|length }}</span>
+                    <span class="stat-label">已完成</span>
+                </div>
             </section>
 
+            <!-- ===== 待处理请求 ===== -->
             <section class="requests-list">
+                <h2 class="section-title">
+                    📩 待处理请求
+                    {% if pending_requests %}
+                        <span class="client-hint">— 点击卡片查看详情并回复</span>
+                    {% endif %}
+                </h2>
+
                 {% if pending_requests %}
                     <div class="request-cards">
                     {% for req in pending_requests %}
@@ -32,6 +44,11 @@
                                 <span class="card-badge {% if req.is_stream %}stream{% else %}normal{% endif %}">
                                     {{ '流式' if req.is_stream else '普通' }}
                                 </span>
+                                {% if not req.client_connected %}
+                                    <span class="card-badge disconnected">❌ 客户端已断开</span>
+                                {% else %}
+                                    <span class="card-badge connected">🟢 连接中</span>
+                                {% endif %}
                             </div>
                             <div class="card-body">
                                 <div class="card-meta">
@@ -60,10 +77,45 @@
                     </div>
                 {% endif %}
             </section>
+
+            <!-- ===== 已完成历史 ===== -->
+            {% if completed_requests %}
+            <section class="requests-list completed-section">
+                <h2 class="section-title">✅ 已完成的历史回复</h2>
+                <div class="request-cards">
+                {% for req in completed_requests %}
+                    <div class="card card-done" onclick="location.href='/request/{{ req.id }}'">
+                        <div class="card-header">
+                            <span class="card-id">#{{ req.id[:12] }}</span>
+                            <span class="card-model">{{ req.model }}</span>
+                            {% if not req.client_was_connected %}
+                                <span class="card-badge disconnected-small">客户端已离线</span>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span>🕐 {{ req.created_at }}</span>
+                                <span>✅ 回复于 {{ req.replied_at }}</span>
+                            </div>
+                            <div class="card-preview">
+                                <span class="label">用户：</span>{{ req.last_message_preview }}
+                            </div>
+                            <div class="card-preview reply-preview">
+                                <span class="label label-reply">回复：</span>{{ req.reply_preview }}
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <span class="btn-link">查看详情 →</span>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            </section>
+            {% endif %}
         </main>
 
         <footer>
-            <p>OpenAI Human Proxy v1.0 · 
+            <p>OpenAI Human Proxy v1.1 · 
                <a href="https://github.com/alone8198/openai-human-proxy" target="_blank">GitHub</a></p>
         </footer>
     </div>
